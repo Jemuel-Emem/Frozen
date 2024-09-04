@@ -3,6 +3,7 @@
 namespace App\Livewire\User;
 use App\Models\Order as order;
 use App\Models\Cart as Cart;
+use App\Models\products;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use WireUi\Traits\Actions;
@@ -95,7 +96,7 @@ class Carts extends Component
 
         $this->totalPrice = $totalPrice;
 
-        // Only open the modal if there are selected products
+
         if (count($this->selectedProductList) > 0) {
             $this->open_modal = true;
         } else {
@@ -129,10 +130,6 @@ class Carts extends Component
     {
 
         $photoPath = $this->gcashReceipt ? $this->gcashReceipt->store('photos', 'public') : null;
-
-
-
-
         $selectedProductList = $this->getSelectedProducts();
         $totalPrice = $this->calculateTotalPrice();
         Order::create([
@@ -144,6 +141,7 @@ class Carts extends Component
             'totalorder' => $totalPrice,
             'mop' => $this->selectedMOP,
             'gcash_receipt' =>$photoPath,
+
         ]);
         $this->deleteSelectedProducts();
         $this->resetSelectedProducts();
@@ -154,26 +152,46 @@ class Carts extends Component
             'icon' => 'success'
         ]);
 
-        // Close the modal
+
         $this->open_modal = false;
     }
 
 
-    protected function getSelectedProducts()
-    {
-        $selectedProductList = [];
+    // protected function getSelectedProducts()
+    // {
+    //     $selectedProductList = [];
 
-        foreach ($this->selectedProducts as $productId => $isSelected) {
-            if ($isSelected) {
-                $product = Cart::find($productId);
-                if ($product) {
-                    $selectedProductList[] = $product->productname;
-                }
+    //     foreach ($this->selectedProducts as $productId => $isSelected) {
+    //         if ($isSelected) {
+    //             $product = Cart::find($productId);
+    //             if ($product) {
+    //                 $selectedProductList[] = $product->productname;
+    //             }
+    //         }
+    //     }
+
+    //     return $selectedProductList;
+    // }
+
+    protected function getSelectedProducts()
+{
+    $selectedProductList = [];
+
+    foreach ($this->selectedProducts as $productId => $isSelected) {
+        if ($isSelected) {
+            $product = Cart::find($productId);
+            if ($product) {
+                $selectedProductList[] = [
+                    'productname' => $product->productname,
+                    'quantity' => $this->quantities[$productId],
+                ];
             }
         }
-
-        return $selectedProductList;
     }
+
+    return $selectedProductList;
+}
+
 
     protected function resetSelectedProducts()
     {

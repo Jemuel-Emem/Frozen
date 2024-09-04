@@ -19,7 +19,17 @@
                         <td class="px-6 py-4">{{ $assignedOrder->name }}</td>
                         <td class="px-6 py-4">{{ $assignedOrder->address }}</td>
                         <td class="px-6 py-4">{{ $assignedOrder->phonenumber }}</td>
-                        <td class="px-6 py-4">{{ implode(', ', json_decode($assignedOrder->productlist)) }}</td>
+                        <td class="px-6 py-4">
+                            @php
+                                $products = json_decode($assignedOrder->productlist);
+                                $productNames = [];
+                                foreach ($products as $product) {
+                                    $productNames[] = $product->productname; // Assuming each product has a 'productname' property
+                                }
+                                echo implode(', ', $productNames);
+                            @endphp
+                        </td>
+
                         <td class="px-6 py-4">{{ $assignedOrder->totalorder }} Php</td>
                     </tr>
                 @endforeach

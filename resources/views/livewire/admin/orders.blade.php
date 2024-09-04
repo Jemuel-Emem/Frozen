@@ -26,7 +26,17 @@
                         <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">{{ $order->name }}</th>
                         <td class="px-6 py-4">{{ $order->address }}</td>
                         <td class="px-6 py-4">{{ $order->phonenumber }}</td>
-                        <td class="px-6 py-4">{{ implode(', ', json_decode($order->productlist)) }}</td>
+                        <td class="px-6 py-4">
+                            @php
+                                $products = json_decode($order->productlist);
+                                $productDetails = [];
+
+                                foreach ($products as $product) {
+                                    $productDetails[] = $product->productname . ' (x' . $product->quantity . ')';
+                                }
+                            @endphp
+                            {{ implode(', ', $productDetails) }}
+                        </td>
                         <td class="px-6 py-4">{{ $order->totalorder }} Php</td>
                         <td class="px-6 py-4">{{ $order->mop }}</td>
                         <td class="px-6 py-4"><img src="{{ asset('storage/' . $order->gcash_receipt) }}" alt="Product Photo" class="w-16 h-16 object-cover"></td>
