@@ -17,7 +17,18 @@ class Carts extends Component
     public $selectedProducts = [];
     public $selectedProductList = [];
     public $search, $totalPrice = 0;
+    public $gcashReceipt;
     public $quantities = [];
+    public $selectedMOP = '';
+
+
+// public function updatedSelectedMOP($value)
+// {
+
+//     if ($value !== 'GCash') {
+//         $this->gcashReceipt = null;
+//     }
+// }
 
     public function mount()
     {
@@ -27,9 +38,14 @@ class Carts extends Component
             $this->quantities[$product->id] = 1;
         }
     }
+    public $paymentMethods = [
+        'COD' => 'Cash on Delivery (COD)',
+        'GCash' => 'GCash',
+    ];
 
     protected $rules = [
         'agree' => 'accepted',
+        'gcashReceipt' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
     ];
 
     public function render()
@@ -112,32 +128,36 @@ class Carts extends Component
     public function ordernow()
     {
 
+        $photoPath = $this->gcashReceipt ? $this->gcashReceipt->store('photos', 'public') : null;
+
+
 
 
         $selectedProductList = $this->getSelectedProducts();
         $totalPrice = $this->calculateTotalPrice();
-
-         Order::create([
-             'user_id'=> auth()->user()->id,
-             'name' => auth()->user()->name,
-             'address' => auth()->user()->address,
-             'phonenumber' => auth()->user()->contactnumber,
-             'productlist' => json_encode($selectedProductList, JSON_UNESCAPED_UNICODE),
-             'totalorder' => $totalPrice,
-         ]);
-
+        Order::create([
+            'user_id' => auth()->user()->id,
+            'name' => auth()->user()->name,
+            'address' => auth()->user()->address,
+            'phonenumber' => auth()->user()->contactnumber,
+            'productlist' => json_encode($selectedProductList, JSON_UNESCAPED_UNICODE),
+            'totalorder' => $totalPrice,
+            'mop' => $this->selectedMOP,
+            'gcash_receipt' =>$photoPath,
+        ]);
         $this->deleteSelectedProducts();
         $this->resetSelectedProducts();
         $this->resetTotalPrice();
-
         $this->dialog()->show([
-            'title'       => 'Order ',
+            'title' => 'Order Successful',
             'description' => 'Your order was successfully processed',
-            'icon'        => 'success'
+            'icon' => 'success'
         ]);
 
+        // Close the modal
         $this->open_modal = false;
     }
+
 
     protected function getSelectedProducts()
     {

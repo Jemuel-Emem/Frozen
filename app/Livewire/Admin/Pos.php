@@ -37,12 +37,66 @@ class Pos extends Component
     }
 
 
-    public function confirmPayment()
-    {
+    // public function paynow()
+    // {
 
-        $this->clearOrder();
-        $this->reciept_modal  = false;
+    //     \App\Models\Sale::create([
+    //         'productlist' => json_encode($this->currentOrder),
+    //         'totalorder' => $this->total,
+    //     ]);
+
+
+    //     $this->clearOrder();
+    //     $this->reciept_modal = false;
+
+    //     $this->notification()->success(
+    //         $title = 'Payment Successful',
+    //         $description = 'The payment has been confirmed and the order has been recorded.'
+    //     );
+    // }
+
+    public function paynow()
+{
+
+    foreach ($this->currentOrder as $orderItem) {
+        $product = Product::find($orderItem['id']);
+
+        if ($product && $product->stocks < $orderItem['quantity']) {
+            $this->notification()->error(
+                $title = 'Stock Error',
+                $description = "The product {$product->productname} does not have enough stock."
+            );
+            return;
+        }
     }
+
+
+    foreach ($this->currentOrder as $orderItem) {
+        $product = Product::find($orderItem['id']);
+
+        if ($product) {
+            $product->stocks -= $orderItem['quantity'];
+            $product->save();
+        }
+    }
+
+
+    \App\Models\Sale::create([
+        'productlist' => json_encode($this->currentOrder),
+        'totalorder' => $this->total,
+    ]);
+
+
+    $this->clearOrder();
+    $this->reciept_modal = false;
+
+    $this->notification()->success(
+        $title = 'Payment Successful',
+        $description = 'The payment has been confirmed, the stock has been updated, and the order has been recorded.'
+    );
+}
+
+
     public function clearOrder()
     {
         $this->currentOrder = [];

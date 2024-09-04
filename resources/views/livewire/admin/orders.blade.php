@@ -14,6 +14,8 @@
                     <th scope="col" class="px-6 py-3 text-gray-700 font-black">Phonenumber</th>
                     <th scope="col" class="px-6 py-3 text-gray-700 font-black">Product List</th>
                     <th scope="col" class="px-6 py-3 text-gray-700 font-black">Total Order</th>
+                    <th scope="col" class="px-6 py-3 text-gray-700 font-black">MOP</th>
+                    <th scope="col" class="px-6 py-3 text-gray-700 font-black">Reciept</th>
                     <th scope="col" class="px-6 py-3 text-gray-700 font-black">Status</th>
                     <th scope="col" class="px-6 py-3 text-gray-700 font-black text-center">Rider</th>
                 </tr>
@@ -26,7 +28,11 @@
                         <td class="px-6 py-4">{{ $order->phonenumber }}</td>
                         <td class="px-6 py-4">{{ implode(', ', json_decode($order->productlist)) }}</td>
                         <td class="px-6 py-4">{{ $order->totalorder }} Php</td>
+                        <td class="px-6 py-4">{{ $order->mop }}</td>
+                        <td class="px-6 py-4"><img src="{{ asset('storage/' . $order->gcash_receipt) }}" alt="Product Photo" class="w-16 h-16 object-cover"></td>
                         <td class="px-6 py-4">{{ $order->orderstatus }}</td>
+
+
                         <td class="px-6 py-4 text-center flex gap-2">
                             <div class="w-full max-w-xs mx-auto">
                                 <select
@@ -43,7 +49,7 @@
 
                                     <button class="w-32 bg-green-500 text-white" wire:click="assignRider({{ $order->id }})">Assign Rider</button>
                                     <button class="w-32 bg-red-500 text-white mt-2" wire:click="declineOrder({{ $order->id }})">Decline</button>
-                           
+
                             </div>
                         </td>
                     </tr>

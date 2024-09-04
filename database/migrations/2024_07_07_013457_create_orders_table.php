@@ -18,10 +18,12 @@ return new class extends Migration
             $table->string('address');
             $table->string('phonenumber');
             $table->string('productlist');
+            $table->string('mop');
+            $table->string('gcash_receipt')->nullable();
             $table->string('totalorder');
             $table->string('orderstatus')->default("on-processing");
 
-            
+
           //  $table->string('photo');
             $table->timestamps();
         });

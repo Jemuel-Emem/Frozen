@@ -5,39 +5,42 @@
         </button>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        @foreach($product as $cot)
-            <x-card title="{{ $cot->productname }}" class="text-blue-500">
-                <div>
-                    <img src="{{ asset(Storage::url($cot->photo)) }}" alt="Valid ID" class="w-full h-32 object-cover rounded">
-                    <x-inputs.number wire:model="quantities.{{ $cot->id }}" label="Item Quantity" />
-                    {{-- <a href="{{ route('terms') }}" class="text-green-500 underline">Terms and Condition</a> --}}
-                </div>
+    @if($product->isEmpty())
+        <div class="text-center text-gray-500">Your cart is empty.</div>
+    @else
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @foreach($product as $cot)
+                <x-card title="{{ $cot->productname }}" class="text-blue-500">
+                    <div>
+                        <img src="{{ asset(Storage::url($cot->photo)) }}" alt="Product Image" class="w-full h-32 object-cover rounded">
+                        <x-inputs.number wire:model="quantities.{{ $cot->id }}" label="Item Quantity" />
+                    </div>
 
-                <x-slot name="footer">
-                    <div class="flex justify-between items-center">
-                        <label for="" class="text-blue-700">{{ $cot->price }} Php</label>
-                        <div>
-                            <div x-data="{ title: 'Sure Delete?' }">
-                                <x-button label="Delete" class="bg-red-500 text-white"
-                                    x-on:confirm="{
-                                        title,
-                                        icon: 'warning',
-                                        method: 'delete',
-                                        params: {{ $cot->id }}
-                                    }"
-                                />
+                    <x-slot name="footer">
+                        <div class="flex justify-between items-center">
+                            <label for="" class="text-blue-700">{{ $cot->price }} Php</label>
+                            <div>
+                                <div x-data="{ title: 'Sure Delete?' }">
+                                    <x-button label="Delete" class="bg-red-500 text-white"
+                                        x-on:confirm="{
+                                            title,
+                                            icon: 'warning',
+                                            method: 'delete',
+                                            params: {{ $cot->id }}
+                                        }"
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <x-checkbox id="checkbox_{{ $cot->id }}" wire:model="selectedProducts.{{ $cot->id }}" />
-                </x-slot>
-            </x-card>
-        @endforeach
-    </div>
+                        <x-checkbox id="checkbox_{{ $cot->id }}" wire:model="selectedProducts.{{ $cot->id }}" />
+                    </x-slot>
+                </x-card>
+            @endforeach
+        </div>
+    @endif
 
-    <x-modal wire:model.defer="open_modal">
-        <x-card  class="relative">
+    <x-modal wire:model="open_modal">
+        <x-card class="relative">
             @if(count($selectedProductList) > 0)
                 <div class="mb-4">
                     <h2 class="text-xl font-bold mb-2 text-blue-500">Order List:</h2>
@@ -61,10 +64,21 @@
                 <p class="md:text-2xl text-xl text-blue-500 font-semibold">Total Price: {{ $totalPrice }} Php</p>
             </div>
 
+            <div class="space-y-4">
+                @foreach($paymentMethods as $key => $method)
+                    <div class="flex items-center">
+                        <input type="radio" id="payment_{{ $key }}" name="payment_method" value="{{ $key }}" wire:model="selectedMOP" />
+                        <label for="payment_{{ $key }}" class="ml-2">{{ $method }}</label>
+                    </div>
+                @endforeach
+            </div>
+                <x-input label="Upload GCash Receipt" type="file" wire:model="gcashReceipt" />
+
+
             <x-slot name="footer">
                 <div class="flex justify-end gap-x-4 mt-4">
                     <x-button flat label="Cancel" x-on:click="close" />
-                    <x-button class="bg-blue-500 hover:bg-blue-700 text-white" label="Place Order" wire:click="ordernow" />
+                    <x-button wire:click="ordernow" label="Place Order" primary />
                 </div>
             </x-slot>
         </x-card>
