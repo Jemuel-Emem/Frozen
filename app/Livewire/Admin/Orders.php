@@ -87,6 +87,7 @@ class Orders extends Component
             $assignOrder->assignrider = $this->selectedRiders[$orderId];
             $assignOrder->save();
 
+         
             $order->delete();
 
             session()->flash('message', 'Rider assigned successfully, product stock updated, and order deleted.');

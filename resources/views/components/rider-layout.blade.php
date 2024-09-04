@@ -25,13 +25,13 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @wireUiScripts
-
+    @livewireStyles
 
 </head>
 
 <body class="font-sans antialiased   bg-no-repeat bg-fuchsia-700">
-    {{-- @livewireScripts
-    <x-dialog /> --}}
+    <x-notifications position="top-right" />
+    <x-dialog z-index="z-50" blur="md" align="center" />
     <nav class="bg-bermuda border-gray-200 dark:bg-gray-900 ">
 
         <div class=" flex flex-wrap items-center justify-between mx-auto p-4">

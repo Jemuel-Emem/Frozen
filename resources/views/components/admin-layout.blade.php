@@ -58,7 +58,7 @@
                      </div>
                 </a>
                 <li>
-                    <a href="Admindashboard"
+                    <a href="{{ route('admin-dashboard') }}"
                         class="flex items-center p-2 text-white hover:text-black rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <i class="ri-dashboard-fill"></i>
                         <span class="ms-3">Dashboard</span>

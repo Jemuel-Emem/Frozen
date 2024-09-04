@@ -12,14 +12,24 @@
                     <div class="p-4 space-y-3 text-gray-700 dark:text-gray-300">
                         <p><span class="font-semibold">Address:</span> {{ $assignedOrder->address }}</p>
                         <p><span class="font-semibold">Phone number:</span> {{ $assignedOrder->phonenumber }}</p>
-                        <p><span class="font-semibold">Order List:</span> {{ implode(', ', json_decode($assignedOrder->productlist)) }}</p>
+                        <div>
+                            @php
+                            $products = json_decode($assignedOrder->productlist);
+                            $productNames = [];
+                            foreach ($products as $product) {
+                                $productNames[] = $product->productname;
+                            }
+                            echo implode(', ', $productNames);
+                        @endphp
+                        </div>
+
                         <p><span class="font-semibold">Total Order:</span> {{ $assignedOrder->totalorder }} Php</p>
                     </div>
 
                     <footer class="p-4 bg-gray-100 dark:bg-gray-800">
-                        <button class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg w-full flex items-center justify-center space-x-2">
+                        <button  wire:click="confirmOrder({{ $assignedOrder->id }})" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg w-full flex items-center justify-center space-x-2">
                             <i class="ri-check-line text-xl"></i>
-                            <span>Received</span>
+                            <span>Confirm Order</span>
                         </button>
                     </footer>
                 </x-card>
