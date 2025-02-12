@@ -18,6 +18,12 @@ class assignorders extends Model
         'totalorder',
         'status',
         'assignrider',
+        'feedback',
 
     ];
+
+    protected $casts = [
+        'user_id' => 'integer',
+    ];
+
 }

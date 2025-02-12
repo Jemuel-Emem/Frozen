@@ -96,6 +96,14 @@
                  </li>
 
                  <li>
+                    <a href="{{ route('inventory') }}"   class="flex items-center p-2 text-white hover:text-black rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <i class="ri-survey-line"></i>
+                       <span class="flex-1 ms-3 whitespace-nowrap">Inventory</span>
+
+                    </a>
+                 </li>
+
+                 <li>
                     <a href="{{ route('orders') }}"   class="flex items-center p-2 text-white hover:text-black rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <i class="ri-file-list-fill"></i>
                        <span class="flex-1 ms-3 whitespace-nowrap">Order Lists </span>
@@ -111,12 +119,20 @@
                  </li>
 
                  <li>
+                    <a href="{{ route('feedback') }}"   class="flex items-center p-2 text-white hover:text-black rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <i class="ri-file-list-fill"></i>
+                       <span class="flex-1 ms-3 whitespace-nowrap">Feedbacks</span>
+
+                    </a>
+                 </li>
+
+                 {{-- <li>
                     <a href=""   class="flex items-center p-2 text-white hover:text-black rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <i class="ri-history-fill"></i>
                        <span class="flex-1 ms-3 whitespace-nowrap">Transaction History</span>
 
                     </a>
-                 </li>
+                 </li> --}}
 
 
 

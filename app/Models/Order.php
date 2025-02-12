@@ -17,6 +17,7 @@ class Order extends Model
         'totalorder',
         'orderstatus',
         'mop',
-        'gcash_receipt'
+        'gcash_receipt',
+
     ];
 }

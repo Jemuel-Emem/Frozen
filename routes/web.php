@@ -63,6 +63,14 @@ Route::middleware([
             return view('admin.pos');
         })->name('pos');
 
+        Route::get('/feeback', function(){
+            return view('admin.feedback');
+        })->name('feedback');
+
+        Route::get('/inventory', function(){
+            return view('admin.inventory');
+        })->name('inventory');
+
      });
 
      Route::prefix('rider')->middleware('rider')->group(function(){

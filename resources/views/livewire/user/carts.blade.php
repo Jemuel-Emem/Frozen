@@ -63,7 +63,7 @@
             <div class="space-y-3">
                 <p class="md:text-2xl text-xl text-blue-500 font-semibold">Total Price: {{ $totalPrice }} Php</p>
             </div>
-
+         <span>Gcash Number:  <span class="text-blue-500">09674534671</span></span>
             <div class="space-y-4">
                 @foreach($paymentMethods as $key => $method)
                     <div class="flex items-center">

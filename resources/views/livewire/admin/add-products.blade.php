@@ -55,7 +55,7 @@
                 <x-input label="Price" wire:model="price" placeholder="" />
                 <x-checkbox id="promo-checkbox" label="Promo?" wire:model.defer="promos" />
                 <x-input label="Stocks" placeholder="" wire:model="stocks" />
-                <x-select label="Category" placeholder="Select category" :options="['Active', 'Pork', 'Chicken', 'Beef']" wire:model.defer="category" />
+                <x-select label="Category" placeholder="Select category" :options="[ 'Pork', 'Chicken', 'Beef']" wire:model.defer="category" />
                 <x-input type="file" label="Photo" placeholder="" wire:model="photo" />
             </div>
 
@@ -75,7 +75,7 @@
                 <x-input label="Price" wire:model="price" placeholder="" />
                 <x-checkbox id="promo-checkbox-edit" label="Promo?" wire:model.defer="promos" />
                 <x-input label="Stocks" placeholder="" wire:model="stocks" />
-                <x-select label="Category" placeholder="Select category" :options="['Active', 'Pork', 'Chicken', 'Beef']" wire:model.defer="category" />
+                <x-select label="Category" placeholder="Select category" :options="[ 'Pork', 'Chicken', 'Beef']" wire:model.defer="category" />
                 <x-input type="file" label="Photo" placeholder="" wire:model="photo" />
             </div>
 
