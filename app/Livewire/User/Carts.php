@@ -17,10 +17,11 @@ class Carts extends Component
     public $open_modal = false;
     public $selectedProducts = [];
     public $selectedProductList = [];
-    public $search, $totalPrice = 0;
+    public $search, $totalPrice = 0 ,  $vatAmount = 0, $grandTotal = 0;
     public $gcashReceipt;
     public $quantities = [];
     public $selectedMOP = '';
+    public $vatRate = 0.12;
 
 
 // public function updatedSelectedMOP($value)
@@ -77,6 +78,35 @@ class Carts extends Component
         $this->calculateTotalPrice();
     }
 
+    // public function calculateTotalPrice()
+    // {
+    //     $totalPrice = 0;
+    //     $this->selectedProductList = [];
+
+    //     $products = Cart::all();
+
+    //     foreach ($this->selectedProducts as $productId => $isSelected) {
+    //         if ($isSelected) {
+    //             $product = $products->find($productId);
+    //             if ($product) {
+    //                 $totalPrice += $product->price * $this->quantities[$productId];
+    //                 $this->selectedProductList[] = $product;
+    //             }
+    //         }
+    //     }
+
+    //     $this->totalPrice = $totalPrice;
+
+
+    //     if (count($this->selectedProductList) > 0) {
+    //         $this->open_modal = true;
+    //     } else {
+    //         $this->open_modal = false;
+    //     }
+
+    //     return $totalPrice;
+    // }
+
     public function calculateTotalPrice()
     {
         $totalPrice = 0;
@@ -95,15 +125,10 @@ class Carts extends Component
         }
 
         $this->totalPrice = $totalPrice;
+        $this->vatAmount = $totalPrice * $this->vatRate;
+        $this->grandTotal = $totalPrice + $this->vatAmount;
 
-
-        if (count($this->selectedProductList) > 0) {
-            $this->open_modal = true;
-        } else {
-            $this->open_modal = false;
-        }
-
-        return $totalPrice;
+        $this->open_modal = count($this->selectedProductList) > 0;
     }
 
     public function updatedSelectedProducts()
@@ -126,52 +151,66 @@ class Carts extends Component
         }
     }
 
+    // public function ordernow()
+    // {
+
+    //     $photoPath = $this->gcashReceipt ? $this->gcashReceipt->store('photos', 'public') : null;
+    //     $selectedProductList = $this->getSelectedProducts();
+    //     $totalPrice = $this->calculateTotalPrice();
+    //     Order::create([
+    //         'user_id' => auth()->user()->id,
+    //         'name' => auth()->user()->name,
+    //         'address' => auth()->user()->address,
+    //         'phonenumber' => auth()->user()->contactnumber,
+    //         'productlist' => json_encode($selectedProductList, JSON_UNESCAPED_UNICODE),
+    //         'totalorder' => $totalPrice,
+    //         'mop' => $this->selectedMOP,
+    //         'gcash_receipt' =>$photoPath,
+
+    //     ]);
+    //     $this->deleteSelectedProducts();
+    //     $this->resetSelectedProducts();
+    //     $this->resetTotalPrice();
+    //     $this->dialog()->show([
+    //         'title' => 'Order Successful',
+    //         'description' => 'Your order was successfully processed',
+    //         'icon' => 'success'
+    //     ]);
+
+
+    //     $this->open_modal = false;
+    // }
+
     public function ordernow()
     {
-
         $photoPath = $this->gcashReceipt ? $this->gcashReceipt->store('photos', 'public') : null;
         $selectedProductList = $this->getSelectedProducts();
-        $totalPrice = $this->calculateTotalPrice();
+
         Order::create([
             'user_id' => auth()->user()->id,
             'name' => auth()->user()->name,
             'address' => auth()->user()->address,
             'phonenumber' => auth()->user()->contactnumber,
             'productlist' => json_encode($selectedProductList, JSON_UNESCAPED_UNICODE),
-            'totalorder' => $totalPrice,
+            'totalorder' => $this->grandTotal, // Grand total with VAT
             'mop' => $this->selectedMOP,
-            'gcash_receipt' =>$photoPath,
-
+            'gcash_receipt' => $photoPath,
         ]);
+
         $this->deleteSelectedProducts();
         $this->resetSelectedProducts();
         $this->resetTotalPrice();
+
         $this->dialog()->show([
             'title' => 'Order Successful',
             'description' => 'Your order was successfully processed',
             'icon' => 'success'
         ]);
 
-
         $this->open_modal = false;
     }
 
 
-    // protected function getSelectedProducts()
-    // {
-    //     $selectedProductList = [];
-
-    //     foreach ($this->selectedProducts as $productId => $isSelected) {
-    //         if ($isSelected) {
-    //             $product = Cart::find($productId);
-    //             if ($product) {
-    //                 $selectedProductList[] = $product->productname;
-    //             }
-    //         }
-    //     }
-
-    //     return $selectedProductList;
-    // }
 
     protected function getSelectedProducts()
 {
@@ -201,6 +240,8 @@ class Carts extends Component
     protected function resetTotalPrice()
     {
         $this->totalPrice = 0;
+        $this->vatAmount = 0;
+        $this->grandTotal = 0;
     }
 
     protected function deleteSelectedProducts()

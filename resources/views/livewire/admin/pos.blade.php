@@ -104,8 +104,8 @@
         </div>
     </div>
 
-    <x-modal wire:model.defer="reciept_modal">
-        <x-card title="Reciept">
+    {{-- <x-modal wire:model.defer="reciept_modal">
+        <x-card title="Reciept" id="receipt-content">
             <div class="space-y-3">
                 @foreach($currentOrder as $orderItem)
                 <div class="flex justify-between mb-2">
@@ -135,9 +135,87 @@
             <x-slot name="footer">
                 <div class="flex justify-end gap-x-4">
                     <x-button flat label="Cancel" x-on:click="close" />
-                    <x-button label="Pay Now" wire:click="paynow" spinner="addrider" green />
+                    <x-button label="Pay Now" wire:click="paynow" onclick="printReceipt()" spinner="addrider" green />
+                </div>
+            </x-slot>
+        </x-card>
+    </x-modal> --}}
+
+    <x-modal wire:model.defer="reciept_modal">
+        <x-card id="receipt-content">
+            <div class="text-center border-b pb-3">
+                <h2 class="text-lg font-bold">Kai's Frozen Store</h2>
+                <p class="text-xs text-gray-500">Location ID: #SIMON123</p>
+                <p class="text-xs text-gray-500">Thank you for your purchase!</p>
+            </div>
+
+            <div class="space-y-3 mt-3 text-sm">
+                <div class="border-b pb-2 flex justify-between font-semibold">
+                    <span>Item</span>
+                    <span>Qty</span>
+                    <span>Price</span>
+                    <span>Total</span>
+                </div>
+
+                @foreach($currentOrder as $orderItem)
+                <div class="flex justify-between items-center text-gray-700 border-b py-2">
+                    <span>{{ $orderItem['productname'] }}</span>
+                    <span class="text-center">{{ $orderItem['quantity'] }}</span>
+                    <span>Php{{ number_format($orderItem['price'], 2) }}</span>
+                    <span class="font-semibold">Php{{ number_format($orderItem['price'] * $orderItem['quantity'], 2) }}</span>
+                </div>
+                @endforeach
+
+                <div class="border-t mt-3 pt-3">
+                    <div>
+                        <p>Subtotal: ₱{{ number_format($subtotal, 2) }}</p>
+                        <p>VAT ({{ $vatRate }}%): ₱{{ number_format($vatAmount, 2) }}</p>
+                        <p><strong>Total: ₱{{ number_format($total, 2) }}</strong></p>
+
+                    </div>
+
+                    <div class="flex justify-between text-gray-800">
+                        <span>Cash:</span>
+                        <span class="font-semibold">Php{{ number_format($cashAmount, 2) }}</span>
+                    </div>
+                    <div class="flex justify-between text-gray-800">
+                        <span>Change:</span>
+                        <span class="font-semibold">Php{{ number_format($change, 2) }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center text-xs text-gray-500 mt-3">
+                <p>*** Thank you for shopping with us! ***</p>
+                <p>For inquiries, call: (123) 456-7890</p>
+            </div>
+
+            <x-slot name="footer">
+                <div class="flex justify-end gap-x-4">
+                    <x-button flat label="Close" x-on:click="close" />
+                    <x-button label="Pay Now" wire:click="paynow" wire:loading.attr="disabled" x-on:click="setTimeout(printReceipt, 500)" spinner="addrider" green />
+
+
                 </div>
             </x-slot>
         </x-card>
     </x-modal>
+
+
+    <script>
+        function printReceipt() {
+            let printContent = document.getElementById('receipt-content').innerHTML;
+            let originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = `
+                <div style="max-width: 300px; margin: auto; font-family: Arial, sans-serif;">
+                    ${printContent}
+                </div>`;
+            window.print();
+            document.body.innerHTML = originalContent;
+            window.location.reload();
+        }
+    </script>
+
+
 </div>

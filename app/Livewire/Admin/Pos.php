@@ -12,13 +12,18 @@ class Pos extends Component
     public $category = 'All items';
     public $currentOrder = [];
     public $cashAmount;
-    public $total, $change;
+    public $change;
     public $reciept_modal = false;
+    public $subtotal = 0;
+    public $total = 0;
+    public $vatRate = 12;
     public function mount()
     {
         $this->products = Product::all();
         $this->cashAmount = 0;
         $this->total = 0;
+        $this->total = 0;
+        $this->subtotal = 0;
     }
 
     public function pay()
@@ -57,6 +62,7 @@ class Pos extends Component
 
     public function paynow()
 {
+
 
     foreach ($this->currentOrder as $orderItem) {
         $product = Product::find($orderItem['id']);
@@ -126,13 +132,31 @@ class Pos extends Component
                     'quantity' => 1
                 ];
             }
+
+            $this->calculateTotal();
         }
     }
 
+    // public function incrementQuantity($index)
+    // {
+    //     $this->currentOrder[$index]['quantity']++;
+    //     $this->calculateTotal();
+    // }
+
     public function incrementQuantity($index)
-    {
+{
+    $product = Product::find($this->currentOrder[$index]['id']);
+    if ($product && $this->currentOrder[$index]['quantity'] < $product->stocks) {
         $this->currentOrder[$index]['quantity']++;
+        $this->calculateTotal();
+    } else {
+        $this->notification()->error(
+            'Stock Error',
+            "Not enough stock available for {$product->productname}."
+        );
     }
+}
+
 
     public function decrementQuantity($index)
     {
@@ -142,8 +166,15 @@ class Pos extends Component
             unset($this->currentOrder[$index]);
             $this->currentOrder = array_values($this->currentOrder);
         }
-    }
 
+        $this->calculateTotal();
+    }
+    public function calculateTotal()
+    {
+        $this->subtotal = collect($this->currentOrder)->sum(fn($item) => $item['price'] * $item['quantity']);
+        $vatAmount = $this->subtotal * ($this->vatRate / 100);
+        $this->total = $this->subtotal + $vatAmount; // This is the correct total
+    }
     private function updateProducts()
     {
         if ($this->category === 'All items') {
@@ -153,25 +184,46 @@ class Pos extends Component
         }
     }
 
+    // public function calculateChange()
+    // {
+    //     $change = $this->cashAmount - $this->total;
+    //     return $change >= 0 ? number_format($change, 2) : 0;
+    // }
+
     public function calculateChange()
-    {
-        $change = $this->cashAmount - $this->total;
-        return $change >= 0 ? number_format($change, 2) : 0;
-    }
+{
+    $this->change = max(0, $this->cashAmount - $this->total);
+}
+
 
 public function render()
 {
-    // Calculate subtotal
+
+    // $subtotal = collect($this->currentOrder)->sum(function ($item) {
+    //     return $item['price'] * $item['quantity'];
+    // });
+    // $vatAmount = $subtotal * ($this->vatRate / 100);
+    // // Calculate total
+    // $this->total = $subtotal; // You can add tax or discounts here if needed
+
+    // return view('livewire.admin.pos', [
+    //     'subtotal' => $subtotal,
+    //    'vatAmount' => $vatAmount,
+    //     'total' => $this->total,
+    // ]);
+
     $subtotal = collect($this->currentOrder)->sum(function ($item) {
         return $item['price'] * $item['quantity'];
     });
 
-    // Calculate total
-    $this->total = $subtotal; // You can add tax or discounts here if needed
+    // Calculate VAT and total
+    $vatAmount = $subtotal * ($this->vatRate / 100);
+    $this->total = $subtotal + $vatAmount;
 
     return view('livewire.admin.pos', [
         'subtotal' => $subtotal,
-        'total' => $this->total,
+        'vatAmount' => $vatAmount,
+        'total' => $this->total, // Make sure this is passed correctly
     ]);
 }
 

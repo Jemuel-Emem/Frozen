@@ -14,28 +14,58 @@ class Products extends Component
     use WithFileUploads, Actions, WithPagination;
 
     public $search;
+    public $category = '';
 
+
+    public function setCategory($category)
+    {
+        $this->category = $category;
+        $this->resetPage();
+    }
     public function find(){
 
       $this->render();
     }
+    // public function render()
+    // {
+    //     $search = '%' . $this->search . '%';
+
+
+    //     $productsWithPromo = Product::where('productname', 'like', $search)
+    //                                  ->where('promos', "yes")
+    //                                  ->get();
+    //     $productsWithoutPromo = Product::where('productname', 'like', $search)
+    //                                     ->where('promos', "no")
+    //                                     ->paginate(10);
+
+    //     return view('livewire.user.products', [
+    //         'productsWithPromo' => $productsWithPromo,
+    //         'productsWithoutPromo' => $productsWithoutPromo,
+    //     ]);
+    // }
+
     public function render()
-    {
-        $search = '%' . $this->search . '%';
+{
+    $search = '%' . $this->search . '%';
 
+    // Base query
+    $query = Product::where('productname', 'like', $search);
 
-        $productsWithPromo = Product::where('productname', 'like', $search)
-                                     ->where('promos', "yes")
-                                     ->get();
-        $productsWithoutPromo = Product::where('productname', 'like', $search)
-                                        ->where('promos', "no")
-                                        ->paginate(10);
-
-        return view('livewire.user.products', [
-            'productsWithPromo' => $productsWithPromo,
-            'productsWithoutPromo' => $productsWithoutPromo,
-        ]);
+    // Apply category filter if a category is selected
+    if (!empty($this->category)) {
+        $query->where('category', $this->category);
     }
+
+    // Get filtered results
+    $productsWithPromo = (clone $query)->where('promos', "yes")->get();
+    $productsWithoutPromo = (clone $query)->where('promos', "no")->paginate(10);
+
+    return view('livewire.user.products', [
+        'productsWithPromo' => $productsWithPromo,
+        'productsWithoutPromo' => $productsWithoutPromo,
+    ]);
+}
+
 
     public function addToCart($id)
     {

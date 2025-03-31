@@ -3,6 +3,12 @@
         <x-input placeholder="Search Product" class="w-80" wire:model="search"></x-input>
         <x-button class="bg-orange-400 hover:bg-orange-500 text-white w-60" wire:click="find">Search</x-button>
     </div>
+    <div class="flex ml-80  gap-3 mb-4">
+        <x-button wire:click="setCategory('')" class=" text-white w-32">All</x-button>
+        <x-button wire:click="setCategory('Pork')" class=" text-white w-32">Pork</x-button>
+        <x-button wire:click="setCategory('Chicken')" class=" text-white w-32">Chicken</x-button>
+        <x-button wire:click="setCategory('Beef')" class=" text-white w-32">Beef</x-button>
+    </div>
 
     <div>
         <h2 class="text-start text-2xl font-bold text-white uppercase">Promo Products</h2>

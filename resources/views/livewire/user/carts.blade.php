@@ -61,8 +61,11 @@
             @endif
 
             <div class="space-y-3">
-                <p class="md:text-2xl text-xl text-blue-500 font-semibold">Total Price: {{ $totalPrice }} Php</p>
+                <p class="md:text-xl text-lg text-blue-500 font-semibold">Subtotal: {{ $totalPrice }} Php</p>
+                <p class="md:text-lg text-md text-blue-600">VAT (12%): {{ $vatAmount }} Php</p>
+                <p class="md:text-2xl text-xl text-blue-700 font-bold">Grand Total: {{ $grandTotal }} Php</p>
             </div>
+
          <span>Gcash Number:  <span class="text-blue-500">09674534671</span></span>
             <div class="space-y-4">
                 @foreach($paymentMethods as $key => $method)
