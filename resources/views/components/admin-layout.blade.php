@@ -15,6 +15,8 @@
     <link
     href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css"
     rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs" defer></script>
 
     <style>
         [x-cloak] {
@@ -114,6 +116,22 @@
                     <a href="{{ route('assignorders') }}"   class="flex items-center p-2 text-white hover:text-black rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <i class="ri-file-list-fill"></i>
                        <span class="flex-1 ms-3 whitespace-nowrap">Assign Orders </span>
+
+                    </a>
+                 </li>
+
+                 <li>
+                    <a href="{{ route('income') }}"   class="flex items-center p-2 text-white hover:text-black rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <i class="ri-file-list-fill"></i>
+                       <span class="flex-1 ms-3 whitespace-nowrap">Income </span>
+
+                    </a>
+                 </li>
+
+                 <li>
+                    <a href="{{ route('history') }}"   class="flex items-center p-2 text-white hover:text-black rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <i class="ri-file-list-fill"></i>
+                       <span class="flex-1 ms-3 whitespace-nowrap">Order History </span>
 
                     </a>
                  </li>

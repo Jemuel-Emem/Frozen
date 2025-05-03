@@ -17,7 +17,7 @@
             <x-card>
                 <div class="flex justify-center flex-col">
                     <div class="">
-                        <img src="{{ asset('storage/' . $product->photo) }}" alt="Product Photo" class="w-full h-32 object-cover">
+                        <img src="{{ asset('storage/' . $product->photo) }}" alt="Product Photo" class="w-full h-64 object-cover">
                     </div>
                     <div class="text-center flex">
                         <div>
@@ -49,7 +49,7 @@
             <x-card>
                 <div class="flex justify-center flex-col">
                     <div class="">
-                        <img src="{{ asset('storage/' . $product->photo) }}" alt="Product Photo" class="w-full h-32 object-cover">
+                        <img src="{{ asset('storage/' . $product->photo) }}" alt="Product Photo" class="w-full h-64 object-cover">
                     </div>
                     <div class="text-center flex">
                         <div>

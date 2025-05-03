@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('platenumber')->nullable();
             $table->string('role')->default(0);;
             $table->string('email')->unique();
+            $table->string('photo')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

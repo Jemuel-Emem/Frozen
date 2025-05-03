@@ -71,6 +71,14 @@ Route::middleware([
             return view('admin.inventory');
         })->name('inventory');
 
+        Route::get('/income', function(){
+            return view('admin.income');
+        })->name('income');
+
+        Route::get('/history', function(){
+            return view('admin.history');
+        })->name('history');
+
      });
 
      Route::prefix('rider')->middleware('rider')->group(function(){

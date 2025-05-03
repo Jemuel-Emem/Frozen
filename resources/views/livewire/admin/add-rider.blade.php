@@ -11,7 +11,10 @@
                     <th scope="col" class="px-6 py-3 text-gray-700 font-black">Contact Number</th>
                     <th scope="col" class="px-6 py-3 text-gray-700 font-black">Address</th>
                     <th scope="col" class="px-6 py-3 text-gray-700 font-black">Plate Number</th>
+                    <th scope="col" class="px-6 py-3 text-gray-700 font-black">Photo</th>
                     <th scope="col" class="px-6 py-3 text-gray-700 font-black text-center">Action</th>
+
+
                 </tr>
             </thead>
             <tbody>
@@ -21,6 +24,14 @@
                         <td class="px-6 py-4">{{ $rider->contactnumber }}</td>
                         <td class="px-6 py-4">{{ $rider->address }}</td>
                         <td class="px-6 py-4">{{ $rider->platenumber }}</td>
+                        <td class="px-6 py-4">
+                            @if($rider->photo)
+                                <img src="{{ asset('storage/' . $rider->photo) }}" alt="Rider Photo" class="w-12 h-12 rounded-full object-cover">
+                            @else
+                                <span class="text-gray-400">No Photo</span>
+                            @endif
+                        </td>
+
                         <td class="px-6 py-4 text-center">
                             <x-button class="w-16 h-6" label="edit" icon="pencil-alt" wire:click="editRider({{ $rider->id }})" />
                             <x-button class="w-16 h-6" label="delete" icon="trash"
@@ -42,6 +53,9 @@
                 <x-input label="Plate Number" placeholder="" wire:model="platenumber" />
                 <x-input label="Email" placeholder="" wire:model="email" />
                 <x-input label="Password" placeholder="" wire:model="password" type="password" />
+                <x-input label="Photo" type="file" wire:model="photo" />
+                @error('photo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+
             </div>
 
             <x-slot name="footer">
@@ -61,6 +75,9 @@
                 <x-input label="Address" placeholder="" wire:model="address" />
                 <x-input label="Plate Number" placeholder="" wire:model="platenumber" />
                 <x-input label="Email" placeholder="" wire:model="email" />
+                <x-input label="Photo" type="file" wire:model="photo" />
+                @error('photo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+
             </div>
 
             <x-slot name="footer">

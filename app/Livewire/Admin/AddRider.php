@@ -19,7 +19,7 @@ class AddRider extends Component
     public $edit_modal = false;
     public $search, $name, $contactnumber, $address, $platenumber, $email, $password;
     public $riderIdToEdit;
-
+    public $photo;
     protected $rules = [
         'name' => 'required|string|max:255',
         'contactnumber' => 'required|string|max:20',
@@ -27,6 +27,7 @@ class AddRider extends Component
         'platenumber' => 'required|string|max:20',
         'email' => 'required|email|max:255|unique:users,email',
         'password' => 'required|string|min:8',
+        'photo' => 'nullable|image|max:2048',
     ];
 
     public function render()
@@ -42,6 +43,7 @@ class AddRider extends Component
     public function addrider()
     {
         $this->validate();
+        $photoPath = $this->photo ? $this->photo->store('riders', 'public') : null;
 
         User::create([
             'name' => $this->name,
@@ -51,9 +53,10 @@ class AddRider extends Component
             'email' => $this->email,
             'role' => 2,
             'password' => Hash::make($this->password),
+            'photo' => $photoPath,
         ]);
 
-        $this->reset(['name', 'contactnumber', 'address', 'platenumber', 'email', 'password', 'add_modal']);
+        $this->reset(['name', 'contactnumber', 'address', 'platenumber', 'email', 'password', 'photo', 'add_modal']);
         $this->notification()->success(
             $title = 'Rider Added!',
             $description = 'The rider was added successfully'
@@ -100,9 +103,10 @@ class AddRider extends Component
                 'address' => $this->address,
                 'platenumber' => $this->platenumber,
                 'email' => $this->email,
+                'photo' => $this->photo,
             ]);
 
-            $this->reset(['name', 'contactnumber', 'address', 'platenumber', 'email', 'password', 'edit_modal']);
+            $this->reset(['photo','name', 'contactnumber', 'address', 'platenumber', 'email', 'password', 'edit_modal']);
             $this->notification()->success(
                 $title = 'Rider Updated!',
                 $description = 'The rider was updated successfully'
